@@ -19,8 +19,6 @@ import pandas as pd
 import scipy.io
 import xmltodict
 
-import pdb
-
 
 class Format(Enum):
     """Enumerates supported file formats."""
