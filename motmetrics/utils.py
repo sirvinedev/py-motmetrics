@@ -58,7 +58,7 @@ def compare_to_groundtruth(gt, dt, dist='iou', distfields=None, distth=0.5):
         return norm2squared_matrix(a, b, max_d2=distth)
 
     def compute_iou_obb(a, b):
-        return iou_matrix_poly(a, b, max_iou=distth)
+        return iou_matrix_obb(a, b, max_iou=distth)
 
     if dist.upper() == 'IOU':
         compute_dist = compute_iou
