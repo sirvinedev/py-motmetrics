@@ -13,7 +13,7 @@ from __future__ import print_function
 
 import numpy as np
 
-from motmetrics.distances import iou_matrix, norm2squared_matrix
+from motmetrics.distances import iou_matrix, norm2squared_matrix, iou_matrix_obb
 from motmetrics.mot import MOTAccumulator
 from motmetrics.preprocess import preprocessResult
 
@@ -57,6 +57,9 @@ def compare_to_groundtruth(gt, dt, dist='iou', distfields=None, distth=0.5):
     def compute_seuc(a, b):
         return norm2squared_matrix(a, b, max_d2=distth)
 
+    def compute_iou_obb(a, b):
+        return iou_matrix_poly(a, b, max_iou=distth)
+
     if dist.upper() == 'IOU':
         compute_dist = compute_iou
     elif dist.upper() == 'EUC':
@@ -67,8 +70,12 @@ def compare_to_groundtruth(gt, dt, dist='iou', distfields=None, distth=0.5):
         compute_dist = compute_euc
     elif dist.upper() == 'SEUC':
         compute_dist = compute_seuc
+    elif dist.upper() == 'IOU_OBB':
+        compute_dist = compute_iou_obb
+    elif dist.upper() == 'IOU_OBB_CENTROID':
+        compute_dist = compute_euc
     else:
-        raise f'Unknown distance metric {dist}. Use "IOU", "EUCLIDEAN",  or "SEUC"'
+        raise f'Unknown distance metric {dist}. Use "IOU", "EUCLIDEAN", "IOU_OBB", "IOU_OBB_CENTROID" or "SEUC"'
 
     acc = MOTAccumulator()
 

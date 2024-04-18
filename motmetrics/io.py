@@ -19,6 +19,8 @@ import pandas as pd
 import scipy.io
 import xmltodict
 
+import pdb
+
 
 class Format(Enum):
     """Enumerates supported file formats."""
@@ -43,6 +45,54 @@ class Format(Enum):
     """Wen, Longyin et al. "UA-DETRAC: A New Benchmark and Protocol for Multi-Object Detection and Tracking." arXiv preprint arXiv:arXiv:1511.04136 (2016).
     http://detrac-db.rit.albany.edu/download
     """
+
+    OBB = 'obb'
+    OBB_CENTROID = 'obb-centroid'
+
+
+def load_obb(fname, **kwargs):
+    r"""Load oriented bounding box data."""
+
+    sep = kwargs.pop('sep', r'\s+|\t+|,')
+    df = pd.read_csv(
+        fname,
+        sep=sep,
+        index_col=[0, 1],
+        skipinitialspace=True,
+        header=None,
+        names=['FrameId', 'Id', 'X0', 'Y0', 'X1', 'Y1', 'X2', 'Y2', 'X3', 'Y3', 'ClassId', 'unused1', 'unused2', 'unused3'],
+        engine='python'
+    )
+
+    # Remove trailing columns
+    del df['unused1']
+    del df['unused2']
+    del df['unused3']
+
+    return df
+
+
+def load_obb_centroid(fname, **kwargs):
+    r"""Load oriented bounding box data with polygon centroid."""
+
+    sep = kwargs.pop('sep', r'\s+|\t+|,')
+    df = pd.read_csv(
+        fname,
+        sep=sep,
+        index_col=[0, 1],
+        skipinitialspace=True,
+        header=None,
+        names=['FrameId', 'Id', 'X0', 'Y0', 'X1', 'Y1', 'X2', 'Y2', 'X3', 'Y3', 'ClassId', 'CX', 'CY', 'unused'],
+        engine='python'
+    )
+
+    df['CX'] = (df['X0'] + df['X1'] + df['X2'] + df['X3']) / 4
+    df['CY'] = (df['Y0'] + df['Y1'] + df['Y2'] + df['Y3']) / 4
+
+    # Remove trailing column
+    del df['unused']
+
+    return df
 
 
 def load_motchallenge(fname, **kwargs):
@@ -315,7 +365,9 @@ def loadtxt(fname, fmt=Format.MOT15_2D, **kwargs):
         Format.MOT15_2D: load_motchallenge,
         Format.VATIC_TXT: load_vatictxt,
         Format.DETRAC_MAT: load_detrac_mat,
-        Format.DETRAC_XML: load_detrac_xml
+        Format.DETRAC_XML: load_detrac_xml,
+        Format.OBB: load_obb,
+        Format.OBB_CENTROID: load_obb_centroid,
     }
     func = switcher.get(fmt)
     return func(fname, **kwargs)
