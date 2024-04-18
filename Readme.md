@@ -1,4 +1,4 @@
-[![PyPI version](https://badge.fury.io/py/motmetrics.svg)](https://badge.fury.io/py/motmetrics) [![Build Status](https://github.com/cheind/py-motmetrics/actions/workflows/python-package.yml/badge.svg)](https://github.com/cheind/py-motmetrics/actions/workflows/python-package.yml)
+[![Build Status](https://github.com/cheind/py-motmetrics/actions/workflows/python-package.yml/badge.svg)](https://github.com/cheind/py-motmetrics/actions/workflows/python-package.yml)
 
 # py-motmetrics
 
@@ -117,21 +117,11 @@ python -m motmetrics.apps.evaluateTracking --help
 
 ## Installation
 
-To install latest development version of **py-motmetrics** (usually a bit more recent than PyPi below)
+To install latest development version of **py-motmetrics**
 
 ```
 pip install git+https://github.com/cheind/py-motmetrics.git
 ```
-
-### Install via PyPi
-
-To install **py-motmetrics** use `pip`
-
-```
-pip install motmetrics
-```
-
-Python 3.5/3.6/3.9 and numpy, pandas and scipy is required. If no binary packages are available for your platform and building source packages fails, you might want to try a distribution like Conda (see below) to install dependencies.
 
 Alternatively for developing, clone or fork this repository and install in editing mode.
 
