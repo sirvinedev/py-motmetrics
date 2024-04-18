@@ -14,6 +14,7 @@ from __future__ import print_function
 import numpy as np
 
 from motmetrics import math_util
+import BboxToolkit as BT
 
 
 def norm2squared_matrix(objs, hyps, max_d2=float('inf')):
@@ -120,4 +121,10 @@ def iou_matrix(objs, hyps, max_iou=1.):
     assert hyps.shape[1] == 4
     iou = boxiou(objs[:, None], hyps[None, :])
     dist = 1 - iou
+    return np.where(dist > max_iou, np.nan, dist)
+
+
+def iou_matrix_obb(objs, hyps, max_iou=1.):
+    """Returns NxK array (num objs, num hyps)"""
+    dist = 1 - BT.bbox_overlaps(objs, hyps)
     return np.where(dist > max_iou, np.nan, dist)
