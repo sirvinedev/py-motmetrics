@@ -46,7 +46,10 @@ def compare_to_groundtruth(gt, dt, dist='iou', distfields=None, distth=0.5):
     """
     # pylint: disable=too-many-locals
     if distfields is None:
-        distfields = ['X', 'Y', 'Width', 'Height']
+        if "OBB" in dist.upper():
+            distfields = ['X0', 'Y0', 'X1', 'Y1', 'X2', 'Y2', 'X3', 'Y3']
+        else:
+            distfields = ['X', 'Y', 'Width', 'Height']
 
     def compute_iou(a, b):
         return iou_matrix(a, b, max_iou=distth)
